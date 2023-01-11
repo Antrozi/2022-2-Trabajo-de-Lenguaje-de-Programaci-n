@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo de Investigacion</title>
+</head>
+<body>
+    <h1>Proyecto LP</h1>
+
+    <table id="tblDatos" border="1">
+        <tr>
+            <td>Fila 1 Columna 1</td>
+        </tr>
+    </table>
+
+    <br>
+    
+    <input type="button" onclick="cambiarContenidoCelda()" value="Cambiar contenido celda">
+    <input type="button" onclick="aumentarceldas()" value="aumentar valores">
+    <input type="button" onclick="suma()" value="sumar">
+    <input type="button" onclick="promedio()" value="promedio">
+    <input type="button" onclick="descargarCSV()" value="descargar datos">
+    <script>    
+        function cambiarContenidoCelda() {
+
+            let fila = parseInt(prompt('Digite el número de la fila:', 1));
+            let columna = parseInt(prompt('Digite el número de la columna:', 1));
+
+            if ((fila >= 1 && fila <= 10) && (columna >= 1 && columna <= 10)) {
+                let celdas = document.getElementById('tblDatos').rows[fila - 1].cells;
+                celdas[columna - 1].innerHTML = prompt('Digite un nuevo valor para la celda:');
+            }
+        }
+        function aumentarceldas(){
+            var filas = parseInt(prompt("Introduce número de filas",""));
+            var columnas= parseInt(prompt("Introduce el número de columnas",""));
+            var codigoHTML = "<table border=\"1\"><tbody>";
+            for (var i = 0; i < filas; i++){
+                codigoHTML +="<tr>";
+                    for (var j = 0; j < columnas; j++){
+                        codigoHTML+="<td>"+0;
+                    }
+                    codigoHTML +="</tr>";
+                }
+            codigoHTML += "</tbody></table>";
+            document.getElementById("tblDatos").innerHTML = codigoHTML;
+        }
+        function suma(){ //resultados en consola
+            let total_f = 0;
+            let total_t = 0;
+            var tabla = document.getElementById("tblDatos");
+            var filas = tabla.rows.length;
+            for (let i = 0; i < filas; i++) {
+                console.log("Fila: ", i + 1)
+
+                row = tabla.rows.item(i);
+                console.log(row)
+                
+                for (var j = 0; j < row.cells.length; j++) {
+                    var col = row.cells.item(j);
+                    total_f = total_f + Number(col.innerHTML);
+                    console.log("Suma de la columna ", j + 1 , ": ", total_f)
+                }
+
+                console.log("Total de toda la fila: ", total_f);
+                total_t = total_t + total_f
+                total_f = 0
+            }
+
+            const tdTotal =document.getElementById("tblDatos");
+            console.log("Total de toda la tabla: ", total_t);
+        }
+        function promedio(){ //resultados en consola
+            let total_f = 0;
+            let total_t = 0;
+            var table = document.getElementById("tblDatos");
+            var count = table.rows.length;
+            for (let i = 0; i < count; i++) {
+                row = table.rows.item(i);
+                for (var j = 0; j < row.cells.length; j++) {
+                    var col = row.cells.item(j);
+                    total_f = total_f + Number(col.innerHTML);
+                }
+                total_t = total_t + total_f
+                total_f = 0
+            }
+            var contar=table.rows.length+row.cells.length;
+
+            const tdTotal =document.getElementById("tblDatos");
+            console.log("Promedio de toda la tabla: ", total_t/contar);
+        }
+
+        function descargarCSV(table_id, separator = ',') {
+            var rows = document.querySelectorAll('table#' + "tblDatos" + ' tr');
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    data = data.replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
+            }
+            var csv_string = csv.join('\n');
+            var filename = 'DATOS' + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+    </script>
+</body>
+</html>
